@@ -1,9 +1,9 @@
 <?php
-include_once "Navigation.php";
+include_once "shop/Navigation.php";
 
-use main\shop\Menu;
+use main\shop\Navigation;
 
-$menuObj = new Menu();
+$menuObj = new Navigation();
 
 $path = basename($_SERVER['PHP_SELF']);
 $name = $menuObj->getMenuItemName($path);

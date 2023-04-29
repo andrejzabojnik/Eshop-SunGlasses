@@ -1,11 +1,10 @@
 <?php
 
-
 use main\database\Database;
 use main\shop\Cart;
 
-require_once 'Cart.php';
-require_once 'Database.php';
+require_once 'shop\Cart.php';
+require_once 'database\Database.php';
 
 $cart = new Cart();
 $db = new Database();
