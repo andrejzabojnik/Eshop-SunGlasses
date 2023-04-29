@@ -1,6 +1,7 @@
 <?php
 // Trieda pre spracovanie užívateľského overenia a registrácie
 namespace main\database;
+use PDO;
 class Database
 {
 

@@ -1,9 +1,10 @@
 <?php
+session_start();
 
 
 use main\database\Database;
 
-require_once "Database.php";
+require_once "database\Database.php";
 
 $db = new Database();
 
@@ -13,7 +14,6 @@ if (isset($_SESSION["user"])) {
 
 if (isset($_POST["login"])) {
     $email = $_POST["email"];
-    session_start();
     $_SESSION['email'] = $email;
     $password = $_POST["password"];
     $result = $db->loginUser($email, $password);

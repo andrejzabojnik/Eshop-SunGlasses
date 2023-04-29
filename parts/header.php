@@ -1,17 +1,16 @@
 <?php
 
 
-include_once "Navigation.php";
-require_once __DIR__ . "/../Database.php";
-require_once __DIR__ . "/../Cart.php";
+include_once "shop/Navigation.php";
+require_once "database/Database.php";
+require_once "shop/Cart.php";
 
 use main\database\Database;
 use main\shop\Cart;
-use main\shop\Menu;
+use main\shop\Navigation;
 
 
-$menuObj = new Menu();
-$db = new Database();
+$menuObj = new Navigation();
 $cart = new Cart();
 
 $menu = $menuObj->getMenu("header");
@@ -47,7 +46,7 @@ $itemCount = $cart->getItemCount();
                                 </div>
                             </li>
                             <?php if(isset($_SESSION["user"])) { ?>
-                                <?php $userInfo = $db->getLoggedInUserName(); ?>
+                                <?php $userInfo = $_SESSION['full_name'];?>
                                 <li> Welcome, <?php echo $userInfo ?> <a href="logout.php" class="text-danger">Logout </li>
                             <?php } else { ?>
                                 <li> <a href="login.php"><span class="flaticon-user"></span></a></li>

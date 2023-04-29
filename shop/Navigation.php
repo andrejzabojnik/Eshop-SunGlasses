@@ -4,7 +4,7 @@ namespace main\shop;
 
 use PDO;
 
-class Menu
+class Navigation
 {
 
     private string $hostname = "localhost";
