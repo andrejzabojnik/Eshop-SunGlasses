@@ -68,26 +68,7 @@ class Database {
         }
     }
 
-    /*  public function loginUser($email, $password) {
-          $sql = "SELECT * FROM users WHERE email = :email";
-          $stmt = $this->conn->prepare($sql);
-          $stmt->bindValue(':email', $email);
-          $stmt->execute();
-          $user = $stmt->fetch(PDO::FETCH_ASSOC);
-          if ($user) {
-              if (password_verify($password, $user["password"])) {
-                  session_start();
-                  $_SESSION["user"] = "yes";
-                  header("Location: index.php");
-                  die();
-              } else {
-                  echo "<div class='alert alert-danger'>Password does not match</div>";
-              }
-          } else {
-              echo "<div class='alert alert-danger'>Email does not match</div>";
-          }
-      }
-    */
+
 
     public function userInfo($email) {
         $sql = "SELECT id,full_name,email,address FROM users WHERE email = ?";
