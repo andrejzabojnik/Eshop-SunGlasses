@@ -109,7 +109,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
           <div style="clear:both"></div>
           <br />
           <h3>Order Details</h3>
-          <div class="table-responsive">
+          <div class="container-fluid" style="height: 400px;">
               <form method="post" class="d-flex justify-content-end">
                   <?php if (!empty($_SESSION["shopping_cart"])): ?>
                       <input type="hidden" name="action" value="clear_cart">
@@ -119,11 +119,12 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
               </form>
               <table class="table table-bordered">
                   <tr>
-                      <th width="40%">Item Name</th>
+                      <th width="15%">Item image</th>
+                      <th width="30%">Item Name</th>
                       <th width="10%">Quantity</th>
-                      <th width="20%">Price</th>
-                      <th width="15%">Total</th>
-                      <th width="5%">Action</th>
+                      <th width="10%">Price</th>
+                      <th width="25%">Total</th>
+                      <th width="15%">Action</th>
                   </tr>
                   <?php
                   if(!empty($_SESSION["shopping_cart"])) {
@@ -135,7 +136,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                               <td><?php echo $values["item_name"]; ?></td>
                               <td><?php echo $values["item_quantity"]; ?></td>
                               <td>$ <?php echo $values["item_price"]; ?></td>
-                              <td>$ <?php echo number_format($values["item_quantity"] * $values["item_price"], 2);?></td>
+                              <td>$ <?php echo $values["item_quantity"] * $values["item_price"] ;?></td>
                               <td><a href="shopping-cart.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                           </tr>
                           <?php
@@ -143,8 +144,8 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                       }
                       ?>
                       <tr>
-                          <td colspan="4" align="right">Total</td>
-                          <td align="right">$ <?php echo number_format($total, 2); ?></td>
+                          <td colspan="5" align="right">Total</td>
+                          <td align="right">$ <?php echo $total ?></td>
                           <td></td>
                       </tr>
                       <?php
