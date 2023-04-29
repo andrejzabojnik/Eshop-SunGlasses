@@ -48,7 +48,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
             $productId = $item["item_id"];
             $quantity = $item["item_quantity"];
             $amount = $item["item_price"];
-            $db->addProductOrder($productId,$orderId, $quantity, $amount);
+            $db->addProductOrder($productId,$orderId, $quantity, $amount * $quantity);
         }
         $cart->clearCart();
         echo "<div id='alert' class='alert alert-success'>Order submitted.</div>";
@@ -172,8 +172,10 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
           </form>
           <br>
           <h1>Your orders</h1>
-
+          <?php $orderID = $db->getMaxOrderID()?>
           <?php $array = $db->getTableOrders($userID ); ?>
+          <?php $array2 = $db->getTableOrderss(); ?>
+          <?php var_dump($array2); ?>
           <table class="table table-bordered table-hover">
               <thead class="thead-dark">
               <tr>
@@ -182,20 +184,55 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                   <th>Email</th>
                   <th>Address</th>
                   <th>Total Products</th>
+                  <th>Products</th>
                   <th>Total Price</th>
               </tr>
               </thead>
               <tbody>
               <?php foreach ($array as $row) { ?>
-
                   <tr>
                       <td><?php echo $row['id']; ?></td>
                       <td><?php echo $row['name']; ?></td>
                       <td><?php echo $row['email']; ?></td>
                       <td><?php echo $row['address']; ?></td>
                       <td><?php echo $row['total_products']; ?></td>
-                      <td><?php echo $row['total_price'] . " euro"; ?></td>
+                      <td>
+                          <table class="table table-bordered">
+                              <thead>
+                              <tr>
+                                  <th>Name</th>
+                                  <th>Quantity</th>
+                                  <th>Price</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <?php
+                              $filtered_orders = array();
 
+                              $search_id = $row['id'];
+
+                              foreach ($array2 as $order) {
+                                  if ($order["IDorder"] == $search_id) {
+                                      $filtered_orders[] = $order;
+                                  }
+                              }
+
+
+
+
+                              foreach ($filtered_orders as $detail) {
+                                  ?>
+                                  <tr>
+                                      <?php $productname = $db->getProductNameById($detail['IDproduct'])?>
+                                      <td><?php echo $productname ?></td>
+                                      <td><?php echo $detail['quantity']; ?></td>
+                                      <td>$<?php echo $detail['amount']; ?></td>
+                                  </tr>
+                              <?php } ?>
+                              </tbody>
+                          </table>
+                      </td>
+                      <td>$<?php echo $row['total_price']; ?></td>
                   </tr>
               <?php } ?>
               </tbody>

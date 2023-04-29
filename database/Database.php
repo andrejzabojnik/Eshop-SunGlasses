@@ -253,6 +253,35 @@ class Database
         return $result;
     }
 
+    public function getTableOrderss()
+    {
+        $sql = "SELECT IDorder,IDproduct, quantity, amount FROM `product_orders`";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+
+    public function getMaxOrderID() {
+        $sql = "SELECT MAX(ID) as max_id FROM `order`";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['max_id'];
+    }
+
+
+    public function getProductNameById($id)
+    {
+        $sql = "SELECT name FROM `products` WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchColumn();
+        return $result;
+    }
+
 
 
 }
