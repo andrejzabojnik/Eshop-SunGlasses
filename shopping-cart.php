@@ -108,7 +108,8 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
 
           <div style="clear:both"></div>
           <br />
-          <h3>Order Details</h3>
+          <h1>Order Details</h1>
+          <br>
           <div class="container-fluid" style="height: 400px;">
               <form method="post" class="d-flex justify-content-end">
                   <?php if (!empty($_SESSION["shopping_cart"])): ?>
