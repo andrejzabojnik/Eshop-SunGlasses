@@ -242,15 +242,7 @@ class Database
         $stmt->execute([$productId, $orderId, $quantity, $amount]);
     }
 
-    public function getTableOrder($orderID)
-    {
-        $sql = "SELECT * FROM product_orders WHERE IDorder = :orderID";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':orderID', $orderID, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
-    }
+
 
     public function getTableOrders($IDuser)
     {
@@ -262,25 +254,7 @@ class Database
         return $result;
     }
 
-    public function getTableOrderss($IDuser)
-    {
-        $sql = "SELECT * FROM `order` WHERE UserID = :IDuser";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':IDuser', $IDuser, PDO::PARAM_INT);
-        $stmt->execute();
-        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach ($orders as &$order) {
-            $sql = "SELECT * FROM `product_orders` WHERE IDorder = :IDorder";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':IDorder', $order['id'], PDO::PARAM_INT);
-            $stmt->execute();
-            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $order['products'] = $products;
-        }
-
-        return $orders;
-    }
 
 }
 
