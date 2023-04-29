@@ -1,8 +1,8 @@
 <?php
 
-namespace main;
+namespace main\shop;
 
-use \PDO;
+use PDO;
 
 class Menu
 {
@@ -99,20 +99,7 @@ class Menu
         }
     }
 
-    public function preparePortfolio(int $numberOfRows = 2, int $numberOfCols = 4): array
-    {
-        $portfolio = [];
-        $colIndex = 1;
 
-        for ($i = 1; $i <= $numberOfRows; $i++) {
-            for ($j = 1; $j <= $numberOfCols; $j++) {
-                $portfolio[$i][] = $colIndex;
-                $colIndex++;
-            }
-        }
-
-        return $portfolio;
-    }
 
     private function validateMenuType(string $menuType): bool
     {
@@ -147,31 +134,7 @@ class Menu
         }
     }
 
-    public function updateMenuItem(int $id, string $sysName, string $userName, string $path): bool
-    {
-        try {
-            $sql = "UPDATE menu SET sys_name = :sys, user_name = :user, path = :path WHERE id = :id";
-            $statement = $this->connection->prepare($sql);
-            $statement->bindValue('sys', $sysName);
-            $statement->bindValue('user', $userName);
-            $statement->bindValue('path', $path);
-            $statement->bindValue('id', $id);
-            $update = $statement->execute();
-            /*
-            $update = $statement->execute([
-                'sys' => $sysName,
-                'user' => $userName,
-                'path' => $path,
-                'id' => $id,
-            ]);
-            */
-        } catch (\Exception $exception) {
-            $update = false;
-        }
 
-        return $update;
-
-    }
 
 
 }

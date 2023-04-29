@@ -1,6 +1,8 @@
 <?php
 
 
+use main\database\Database;
+
 require_once "Database.php";
 
 $db = new Database();

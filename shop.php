@@ -1,6 +1,8 @@
 <?php
 
 
+use main\database\Database;
+use main\shop\Cart;
 
 require_once 'Cart.php';
 require_once 'Database.php';

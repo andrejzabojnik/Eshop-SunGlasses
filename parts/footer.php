@@ -1,7 +1,7 @@
 <?php
-include_once "functions.php";
+include_once "Navigation.php";
 
-use main\Menu;
+use main\shop\Menu;
 
 $menuObj = new Menu();
 

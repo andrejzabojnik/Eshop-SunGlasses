@@ -1,11 +1,13 @@
 <?php
 
 
-include_once "functions.php";
+include_once "Navigation.php";
 require_once __DIR__ . "/../Database.php";
 require_once __DIR__ . "/../Cart.php";
 
-use main\Menu;
+use main\database\Database;
+use main\shop\Cart;
+use main\shop\Menu;
 
 
 $menuObj = new Menu();

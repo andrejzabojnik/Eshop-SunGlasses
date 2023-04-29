@@ -1,6 +1,8 @@
 <?php
 // Trieda pre spracovanie užívateľského overenia a registrácie
-class Database {
+namespace main\database;
+class Database
+{
 
     private string $hostname = "localhost";
     private int $port = 3306;
@@ -11,13 +13,14 @@ class Database {
     private $errors = array();
     private $conn;
 
-    function __construct() {
+    function __construct()
+    {
 
         try {
-            $this->conn = new PDO("mysql:charset=utf8;host=".$this->hostname.";dbname=".$this->dbName.";port=".$this->port, $this->username, $this->password);
+            $this->conn = new PDO("mysql:charset=utf8;host=" . $this->hostname . ";dbname=" . $this->dbName . ";port=" . $this->port, $this->username, $this->password);
         } catch (\PDOException $exception) {
             echo $exception->getMessage();
-            echo $this->hostname."  ".$this->port."  ".$this->dbName;
+            echo $this->hostname . "  " . $this->port . "  " . $this->dbName;
             die();
         }
     }
@@ -30,32 +33,35 @@ class Database {
         $stmt->execute([$name, $email, $subject, $message]);
     }
 
-    public function validateUser($fullName, $email,$address, $password, $passwordRepeat) {
-        if (empty($fullName) OR empty($email) OR empty($password) OR empty($address) OR empty($passwordRepeat)) {
-            array_push($this->errors,"All fields are required");
+    public function validateUser($fullName, $email, $address, $password, $passwordRepeat)
+    {
+        if (empty($fullName) or empty($email) or empty($password) or empty($address) or empty($passwordRepeat)) {
+            array_push($this->errors, "All fields are required");
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             array_push($this->errors, "Email is not valid");
         }
-        if (strlen($password)<8) {
-            array_push($this->errors,"Password must be at least 8 characters long");
+        if (strlen($password) < 8) {
+            array_push($this->errors, "Password must be at least 8 characters long");
         }
-        if ($password!==$passwordRepeat) {
-            array_push($this->errors,"Password does not match");
+        if ($password !== $passwordRepeat) {
+            array_push($this->errors, "Password does not match");
         }
     }
 
-    public function checkEmailExists($email) {
+    public function checkEmailExists($email)
+    {
         $sql = "SELECT * FROM users WHERE email = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$email]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
-            array_push($this->errors,"Email already exists!");
+            array_push($this->errors, "Email already exists!");
         }
     }
 
-    public function createUser($fullName, $email, $address, $password) {
+    public function createUser($fullName, $email, $address, $password)
+    {
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO users (full_name, email, address, password) VALUES ( ?, ?, ?, ? )";
@@ -69,8 +75,8 @@ class Database {
     }
 
 
-
-    public function userInfo($email) {
+    public function userInfo($email)
+    {
         $sql = "SELECT id,full_name,email,address FROM users WHERE email = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$email]);
@@ -78,7 +84,8 @@ class Database {
         return $result;
     }
 
-    public function getUserID($email) {
+    public function getUserID($email)
+    {
         $sql = "SELECT id FROM users WHERE email = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$email]);
@@ -87,7 +94,8 @@ class Database {
     }
 
 
-    public function loginUser($email, $password) {
+    public function loginUser($email, $password)
+    {
         $sql = "SELECT * FROM users WHERE email = :email";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':email', $email);
@@ -110,7 +118,8 @@ class Database {
         }
     }
 
-    public function getLoggedInUserName() {
+    public function getLoggedInUserName()
+    {
         if (isset($_SESSION["user"]) && $_SESSION["user"] === "yes" && isset($_SESSION["full_name"])) {
             return $_SESSION["full_name"];
         } else {
@@ -118,7 +127,8 @@ class Database {
         }
     }
 
-    public function getLoggedInUserEmail() {
+    public function getLoggedInUserEmail()
+    {
         if (isset($_SESSION["user"]) && $_SESSION["user"] === "yes" && isset($_SESSION["email"])) {
             return $_SESSION["email"];
         } else {
@@ -126,7 +136,8 @@ class Database {
         }
     }
 
-    public function verifyUser($email) {
+    public function verifyUser($email)
+    {
         $sql = "SELECT * FROM users WHERE email = :email";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':email', $email);
@@ -139,17 +150,21 @@ class Database {
         }
     }
 
-    public function getErrors() {
+    public function getErrors()
+    {
         return $this->errors;
     }
-    function getProducts() {
+
+    function getProducts()
+    {
         $sql = "SELECT * FROM products ORDER BY id ASC";
         $result = $this->conn->query($sql);
         return $result;
 
     }
 
-    public function getAllProducts() {
+    public function getAllProducts()
+    {
         $query = "SELECT * FROM product";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -165,7 +180,8 @@ class Database {
         return $products;
     }
 
-    public function addProduct($name, $price, $description, $image) {
+    public function addProduct($name, $price, $description, $image)
+    {
         $query = "INSERT INTO product (name, price, description, image) VALUES (:name, :price, :description, :image)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':name', $name);
@@ -180,7 +196,8 @@ class Database {
         }
     }
 
-    public function updateProduct($id, $name, $price, $description, $image) {
+    public function updateProduct($id, $name, $price, $description, $image)
+    {
         $query = "UPDATE product SET name = :name, price = :price, description = :description, image = :image WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
@@ -196,7 +213,8 @@ class Database {
         }
     }
 
-    public function deleteProduct($id) {
+    public function deleteProduct($id)
+    {
         $query = "DELETE FROM product WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
@@ -208,20 +226,23 @@ class Database {
         }
     }
 
-    public function addOrder($name, $email, $address, $totalProduct, $totalPrice, $userId) {
+    public function addOrder($name, $email, $address, $totalProduct, $totalPrice, $userId)
+    {
         $sql = "INSERT INTO `order` (name, email, address, total_products, total_price, UserID) VALUES (?, ?, ?, ?, ?,?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$name, $email, $address, $totalProduct, $totalPrice, $userId]);
         return $this->conn->lastInsertId();
     }
 
-    public function addProductOrder($productId,$orderId, $quantity, $amount) {
+    public function addProductOrder($productId, $orderId, $quantity, $amount)
+    {
         $sql = "INSERT INTO product_orders (IDproduct, IDorder, quantity, amount) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$productId,$orderId, $quantity, $amount]);
+        $stmt->execute([$productId, $orderId, $quantity, $amount]);
     }
 
-    public function getTableOrder($orderID){
+    public function getTableOrder($orderID)
+    {
         $sql = "SELECT * FROM product_orders WHERE IDorder = :orderID";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':orderID', $orderID, PDO::PARAM_INT);
@@ -230,7 +251,8 @@ class Database {
         return $result;
     }
 
-    public function getTableOrders($IDuser){
+    public function getTableOrders($IDuser)
+    {
         $sql = "SELECT * FROM `order` WHERE UserID = :IDuser";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':IDuser', $IDuser, PDO::PARAM_INT);
@@ -239,14 +261,15 @@ class Database {
         return $result;
     }
 
-    public function getTableOrderss($IDuser){
+    public function getTableOrderss($IDuser)
+    {
         $sql = "SELECT * FROM `order` WHERE UserID = :IDuser";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':IDuser', $IDuser, PDO::PARAM_INT);
         $stmt->execute();
         $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach($orders as &$order) {
+        foreach ($orders as &$order) {
             $sql = "SELECT * FROM `product_orders` WHERE IDorder = :IDorder";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':IDorder', $order['id'], PDO::PARAM_INT);
