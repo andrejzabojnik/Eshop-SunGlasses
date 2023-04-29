@@ -126,14 +126,12 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                       <th width="5%">Action</th>
                   </tr>
                   <?php
-                  if(!empty($_SESSION["shopping_cart"]))
-                  {
+                  if(!empty($_SESSION["shopping_cart"])) {
                       $total = 0;
-                      foreach($_SESSION["shopping_cart"] as $keys => $values)
-                      {
+                      foreach($_SESSION["shopping_cart"] as $keys => $values) {
                           ?>
-
                           <tr>
+                              <td><img src="images/<?php echo $values["item_img"]; ?>" alt="<?php echo $values["item_name"]; ?>" width="100"></td>
                               <td><?php echo $values["item_name"]; ?></td>
                               <td><?php echo $values["item_quantity"]; ?></td>
                               <td>$ <?php echo $values["item_price"]; ?></td>
@@ -145,15 +143,14 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                       }
                       ?>
                       <tr>
-                          <td colspan="3" align="right">Total</td>
+                          <td colspan="4" align="right">Total</td>
                           <td align="right">$ <?php echo number_format($total, 2); ?></td>
                           <td></td>
                       </tr>
                       <?php
                   }
-                  else{
-                      echo "<div class='alert alert-danger'>Cart is empty.</div>";
-
+                  else {
+                      echo "<h3>Your cart is empty!</h3>";
                   }
                   ?>
                   <?php $email = $db->getLoggedInUserEmail()  ?>

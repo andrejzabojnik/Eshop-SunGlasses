@@ -21,7 +21,8 @@ if (isset($_POST["add_to_cart"])) {
     $item_name = $_POST["hidden_name"];
     $item_price = $_POST["hidden_price"];
     $item_quantity = $_POST["quantity"];
-    $cart->addItem($item_id, $item_name, $item_price, $item_quantity);
+    $item_image = $_POST["hidden_image"];
+    $cart->addItem($item_image,$item_id, $item_name, $item_price, $item_quantity);
     echo "<div id='alert' class='alert alert-success'>Item $item_name added $item_quantity pieces to cart</div>";
 }
 
@@ -93,11 +94,13 @@ if (isset($_POST["add_to_cart"])) {
                             <form method="post" action="shop.php?action=add&id=<?php echo $row["id"]; ?>">
                                 <div style="border:1px solid #333; background-color:#FFFFFF; border-radius:5px; padding:16px;" align="center">
                                     <img src="images/<?php echo $row["image"]; ?>" class="img-responsive" /><br />
+
                                     <h4 class="text-info"><?php echo $row["name"]; ?></h4>
                                     <h4 class="text-danger">$ <?php echo $row["price"]; ?></h4>
                                     <input type="number" name="quantity" value="1" class="form-control" />
                                     <input type="hidden" name="hidden_name" value="<?php echo $row["name"]; ?>" />
                                     <input type="hidden" name="hidden_price" value="<?php echo $row["price"]; ?>" />
+                                    <input type="hidden" name="hidden_image" value="<?php echo $row["image"]; ?>" />
                                     <input type="submit" name="add_to_cart" style="margin-top:5px;" class="btn btn-success" value="Add to Cart" />
                                 </div>
                             </form>

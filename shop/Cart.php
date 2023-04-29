@@ -17,12 +17,13 @@ class Cart
         $this->cartItems = &$_SESSION['shopping_cart'];
     }
 
-    public function addItem($item_id, $item_name, $item_price, $item_quantity)
+    public function addItem($item_img,$item_id, $item_name, $item_price, $item_quantity)
     {
         $item_array_id = array_column($this->cartItems, 'item_id');
         if (!in_array($item_id, $item_array_id)) {
             $count = count($this->cartItems);
             $item_array = array(
+                'item_img' => $item_img,
                 'item_id' => $item_id,
                 'item_name' => $item_name,
                 'item_price' => $item_price,
