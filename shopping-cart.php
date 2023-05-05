@@ -17,7 +17,20 @@ $db = new Database();
 if (isset($_GET["action"])) {
     if ($_GET["action"] == "delete") {
         $item_id = $_GET["id"];
+        echo "<div id='alert' class='alert alert-danger'>Item remove.</div>";
         $cart->removeItem($item_id);
+
+
+    }
+}
+
+
+if (isset($_GET["action"])) {
+    if ($_GET["action"] == "delete_order") {
+        $order_id = $_GET["id"];
+        $db->deleteProductOrder($order_id);
+        $db->removeOrder($order_id);
+        echo "<div id='alert' class='alert alert-danger'>Order canceled.</div>";
 
 
     }
@@ -101,11 +114,6 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
 
       <!--================Cart Area =================-->
       <div class="container">
-
-
-
-
-
           <div style="clear:both"></div>
           <br />
           <h1>Order Details</h1>
@@ -175,7 +183,6 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
           <?php $orderID = $db->getMaxOrderID()?>
           <?php $array = $db->getTableOrders($userID ); ?>
           <?php $array2 = $db->getTableOrderss(); ?>
-          <?php var_dump($array2); ?>
           <table class="table table-bordered table-hover">
               <thead class="thead-dark">
               <tr>
@@ -186,6 +193,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                   <th>Total Products</th>
                   <th>Products</th>
                   <th>Total Price</th>
+                  <th>Action</th> <!-- pridany stlpec pre tlačidlá -->
               </tr>
               </thead>
               <tbody>
@@ -208,22 +216,16 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                               <tbody>
                               <?php
                               $filtered_orders = array();
-
                               $search_id = $row['id'];
-
                               foreach ($array2 as $order) {
                                   if ($order["IDorder"] == $search_id) {
                                       $filtered_orders[] = $order;
                                   }
                               }
-
-
-
-
                               foreach ($filtered_orders as $detail) {
                                   ?>
                                   <tr>
-                                      <?php $productname = $db->getProductNameById($detail['IDproduct'])?>
+                                      <?php $productname = $db->getProductNameById($detail['IDproduct']) ?>
                                       <td><?php echo $productname ?></td>
                                       <td><?php echo $detail['quantity']; ?></td>
                                       <td>$<?php echo $detail['amount']; ?></td>
@@ -233,6 +235,14 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                           </table>
                       </td>
                       <td>$<?php echo $row['total_price']; ?></td>
+                      <td>
+                          <a href="edit-order.php?action=edit_order&id=<?php echo $row['id'] ?>"><span class="text-danger">Edit</span></a>
+                          <br>
+                          <a href="shopping-cart.php?action=delete_order&id=<?php echo $row['id'] ?>"><span class="text-danger">Cancel</span></a>
+                      </td>
+
+
+
                   </tr>
               <?php } ?>
               </tbody>
@@ -242,26 +252,10 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
 
 
 
-      </div>
-      <br />
-
-
 </body>
 </html>
 
-<?php
-//If you have use Older PHP Version, Please Uncomment this function for removing error
 
-/*function array_column($array, $column_name)
-{
-	$output = array();
-	foreach($array as $keys => $values)
-	{
-		$output[] = $values[$column_name];
-	}
-	return $output;
-}*/
-?>
       </html>
 
       <!--================End Cart Area =================-->

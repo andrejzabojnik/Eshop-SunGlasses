@@ -226,12 +226,59 @@ class Database
         }
     }
 
+    public function deleteProductOrder($id)
+    {
+        $query = "DELETE FROM product_orders WHERE IDorder = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+
     public function addOrder($name, $email, $address, $totalProduct, $totalPrice, $userId)
     {
         $sql = "INSERT INTO `order` (name, email, address, total_products, total_price, UserID) VALUES (?, ?, ?, ?, ?,?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$name, $email, $address, $totalProduct, $totalPrice, $userId]);
         return $this->conn->lastInsertId();
+    }
+
+
+    public function editOrder($id, $name, $email, $address)
+    {
+        $query = "UPDATE `order` SET name = :name, email = :email, address = :address WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':address', $address);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function removeOrder($id)
+    {
+        $query = "DELETE FROM `order` WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $result = $stmt->execute([$id]);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function addProductOrder($productId, $orderId, $quantity, $amount)
