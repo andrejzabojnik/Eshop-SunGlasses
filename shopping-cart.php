@@ -171,82 +171,86 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
 
 
               </table>
-          </div>
-          <form method="post">
-              <?php if (!empty($_SESSION["shopping_cart"])): ?>
-                  <input type="hidden" name="action" value="submit_order">
-                  <input type="submit" name="submit_order" value="Send Order" class="btn btn-block" style="background-color: green;">
-              <?php endif; ?>
-          </form>
-          <br>
-          <h1>Your orders</h1>
-          <?php $orderID = $db->getMaxOrderID()?>
-          <?php $array = $db->getTableOrders($userID ); ?>
-          <?php $array2 = $db->getTableOrderss(); ?>
-          <table class="table table-bordered table-hover">
-              <thead class="thead-dark">
-              <tr>
-                  <th>Order number</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Address</th>
-                  <th>Total Products</th>
-                  <th>Products</th>
-                  <th>Total Price</th>
-                  <th>Action</th> <!-- pridany stlpec pre tlačidlá -->
-              </tr>
-              </thead>
-              <tbody>
-              <?php foreach ($array as $row) { ?>
+
+
+              <form method="post">
+                  <?php if (!empty($_SESSION["shopping_cart"])): ?>
+                      <input type="hidden" name="action" value="submit_order">
+                      <input type="submit" name="submit_order" value="Send Order" class="btn btn-block" style="background-color: green;">
+                  <?php endif; ?>
+              </form>
+              <br>
+              <h1>Your orders</h1>
+              <?php $orderID = $db->getMaxOrderID()?>
+              <?php $array = $db->getTableOrders($userID ); ?>
+              <?php $array2 = $db->getTableOrderss(); ?>
+              <table class="table table-bordered table-hover">
+                  <thead class="thead-dark">
                   <tr>
-                      <td><?php echo $row['id']; ?></td>
-                      <td><?php echo $row['name']; ?></td>
-                      <td><?php echo $row['email']; ?></td>
-                      <td><?php echo $row['address']; ?></td>
-                      <td><?php echo $row['total_products']; ?></td>
-                      <td>
-                          <table class="table table-bordered">
-                              <thead>
-                              <tr>
-                                  <th>Name</th>
-                                  <th>Quantity</th>
-                                  <th>Price</th>
-                              </tr>
-                              </thead>
-                              <tbody>
-                              <?php
-                              $filtered_orders = array();
-                              $search_id = $row['id'];
-                              foreach ($array2 as $order) {
-                                  if ($order["IDorder"] == $search_id) {
-                                      $filtered_orders[] = $order;
-                                  }
-                              }
-                              foreach ($filtered_orders as $detail) {
-                                  ?>
-                                  <tr>
-                                      <?php $productname = $db->getProductNameById($detail['IDproduct']) ?>
-                                      <td><?php echo $productname ?></td>
-                                      <td><?php echo $detail['quantity']; ?></td>
-                                      <td>$<?php echo $detail['amount']; ?></td>
-                                  </tr>
-                              <?php } ?>
-                              </tbody>
-                          </table>
-                      </td>
-                      <td>$<?php echo $row['total_price']; ?></td>
-                      <td>
-                          <a href="edit-order.php?action=edit_order&id=<?php echo $row['id'] ?>"><span class="text-danger">Edit</span></a>
-                          <br>
-                          <a href="shopping-cart.php?action=delete_order&id=<?php echo $row['id'] ?>"><span class="text-danger">Cancel</span></a>
-                      </td>
-
-
-
+                      <th>Order number</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Address</th>
+                      <th>Total Products</th>
+                      <th>Products</th>
+                      <th>Total Price</th>
+                      <th>Action</th> <!-- pridany stlpec pre tlačidlá -->
                   </tr>
-              <?php } ?>
-              </tbody>
-          </table>
+                  </thead>
+                  <tbody>
+                  <?php foreach ($array as $row) { ?>
+                      <tr>
+                          <td><?php echo $row['id']; ?></td>
+                          <td><?php echo $row['name']; ?></td>
+                          <td><?php echo $row['email']; ?></td>
+                          <td><?php echo $row['address']; ?></td>
+                          <td><?php echo $row['total_products']; ?></td>
+                          <td>
+                              <table class="table table-bordered">
+                                  <thead>
+                                  <tr>
+                                      <th>Name</th>
+                                      <th>Quantity</th>
+                                      <th>Price</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <?php
+                                  $filtered_orders = array();
+                                  $search_id = $row['id'];
+                                  foreach ($array2 as $order) {
+                                      if ($order["IDorder"] == $search_id) {
+                                          $filtered_orders[] = $order;
+                                      }
+                                  }
+                                  foreach ($filtered_orders as $detail) {
+                                      ?>
+                                      <tr>
+                                          <?php $productname = $db->getProductNameById($detail['IDproduct']) ?>
+                                          <td><?php echo $productname ?></td>
+                                          <td><?php echo $detail['quantity']; ?></td>
+                                          <td>$<?php echo $detail['amount']; ?></td>
+                                      </tr>
+                                  <?php } ?>
+                                  </tbody>
+                              </table>
+                          </td>
+                          <td>$<?php echo $row['total_price']; ?></td>
+                          <td>
+                              <a href="edit-order.php?action=edit_order&id=<?php echo $row['id'] ?>" class="text-danger d-block">Edit</a>
+                              <br>
+                              <a href="shopping-cart.php?action=delete_order&id=<?php echo $row['id'] ?>" class="text-danger d-block">Cancel</a>
+                          </td>
+
+
+
+                      </tr>
+                  <?php } ?>
+                  </tbody>
+              </table>
+
+              <?php include_once "parts/footer.php"; ?>
+          </div>
 
       </div>
 
