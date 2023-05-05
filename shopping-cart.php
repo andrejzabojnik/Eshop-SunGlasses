@@ -7,6 +7,13 @@ use main\shop\Cart;
 require_once 'shop/Cart.php';
 require_once 'database/Database.php';
 
+
+if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
+    exit;
+}
+
+
 $cart = new Cart();
 
 

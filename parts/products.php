@@ -34,7 +34,7 @@ if (isset($_POST["add_to_cart"])) {
         while($row = $result->fetch(PDO::FETCH_ASSOC)) {
             ?>
             <div class="col-md-4">
-                <form method="post" action="shop.php?action=add&id=<?php echo $row["id"]; ?>">
+                <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']) ?>?action=add&id=<?php echo $row["id"]; ?>">
                     <div style="border:1px solid #333; background-color:#FFFFFF; border-radius:5px; padding:16px;" align="center">
                         <img src="images/<?php echo $row["image"]; ?>" class="img-responsive" /><br />
 
