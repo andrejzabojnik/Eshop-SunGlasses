@@ -196,6 +196,72 @@ class Database
         }
     }
 
+
+
+    public function addCart($image, $name, $quantity, $price, $ProductID)
+    {
+        $query = "SELECT * FROM cart WHERE ProductID = :ProductID";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':ProductID', $ProductID);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) { // riadok s danym ProductID uz existuje
+            $query = "UPDATE cart SET quantity = quantity + :quantity, price = price + :price WHERE ProductID = :ProductID";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':quantity', $quantity);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':ProductID', $ProductID);
+            $stmt->execute();
+        } else { // riadok s danym ProductID neexistuje
+            $query = "INSERT INTO cart (image, name, quantity, price, ProductID) VALUES (:image, :name, :quantity, :price, :ProductID)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':image', $image);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':quantity', $quantity);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':ProductID', $ProductID);
+
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function getCartItems() {
+        $query = "SELECT image, name, quantity, price FROM cart";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function removeCart($id)
+    {
+        $query = "DELETE FROM cart WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function clearCart()
+    {
+        $query = "DELETE FROM cart";
+        $stmt = $this->conn->prepare($query);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     public function updateProduct($id, $name, $price, $description, $image)
     {
         $query = "UPDATE product SET name = :name, price = :price, description = :description, image = :image WHERE id = :id";

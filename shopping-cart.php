@@ -147,20 +147,22 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                       <th width="15%">Action</th>
                   </tr>
                   <?php
+
                   if(!empty($_SESSION["shopping_cart"])) {
-                      $total = 0;
-                      foreach($_SESSION["shopping_cart"] as $keys => $values) {
+                      var_dump($db->getCartItems());
+
+                      foreach($db->getCartItems() as $keys => $values) {
                           ?>
                           <tr>
-                              <td><img src="images/<?php echo $values["item_img"]; ?>" alt="<?php echo $values["item_name"]; ?>" width="100"></td>
-                              <td><?php echo $values["item_name"]; ?></td>
-                              <td><?php echo $values["item_quantity"]; ?></td>
-                              <td>$ <?php echo $values["item_price"]; ?></td>
-                              <td>$ <?php echo $values["item_quantity"] * $values["item_price"] ;?></td>
-                              <td><a href="shopping-cart.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
+                              <td><img src="images/<?php echo $values["image"]; ?>" alt="<?php echo $values["name"]; ?>" width="100"></td>
+                              <td><?php echo $values["name"]; ?></td>
+                              <td><?php echo $values["quantity"]; ?></td>
+                              <td>$ <?php echo $values["price"]; ?></td>
+                              <td>$ <?php echo $values["quantity"] * $values["price"] ;?></td>
+                              <td><a href="shopping-cart.php?action=delete&id=<?php echo $values["ProductID"]; ?>"><span class="text-danger">Remove</span></a></td>
                           </tr>
                           <?php
-                          $total = $total + ($values["item_quantity"] * $values["item_price"]);
+                          $total = $total + ($values["quantity"] * $values["price"]);
                       }
                       ?>
                       <tr>

@@ -50,6 +50,8 @@ class Cart
         return false;
     }
 
+
+
     public function clearCart()
     {
         unset($_SESSION["shopping_cart"]);

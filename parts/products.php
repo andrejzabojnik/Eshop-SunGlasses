@@ -22,7 +22,7 @@ if (isset($_POST["add_to_cart"])) {
     $item_price = $_POST["hidden_price"];
     $item_quantity = $_POST["quantity"];
     $item_image = $_POST["hidden_image"];
-    $cart->addItem($item_image,$item_id, $item_name, $item_price, $item_quantity);
+    $db->addCart($item_image,$item_name, $item_quantity,$item_price * $item_quantity, $item_id);
     echo "<div id='alert' class='alert alert-success'>Item $item_name added $item_quantity pieces to cart</div>";
 }
 
