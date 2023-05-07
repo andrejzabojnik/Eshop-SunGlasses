@@ -230,7 +230,7 @@ class Database
     }
 
     public function getCartItems() {
-        $query = "SELECT image, name, quantity, price FROM cart";
+        $query = "SELECT image, name, quantity, price,ProductID FROM cart";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -238,7 +238,7 @@ class Database
 
     public function removeCart($id)
     {
-        $query = "DELETE FROM cart WHERE id = :id";
+        $query = "DELETE FROM cart WHERE ProductID = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
 
@@ -248,6 +248,26 @@ class Database
             return false;
         }
     }
+
+    public function getTotalQuantity() {
+        $query = "SELECT SUM(quantity) as totalQuantity FROM cart";
+        $result = $this->conn->query($query);
+        $data = $result->fetch(PDO::FETCH_ASSOC);
+        return $data['totalQuantity'];
+
+    }
+
+    public function getTotalPrice() {
+        $query = "SELECT SUM(price * quantity) as totalPrice FROM cart";
+        $result = $this->conn->query($query);
+        $data = $result->fetch(PDO::FETCH_ASSOC);
+        return $data['totalPrice'];
+
+
+    }
+
+
+
 
 
     public function clearCart()

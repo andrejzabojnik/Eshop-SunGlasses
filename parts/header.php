@@ -15,9 +15,10 @@ use main\shop\Navigation;
 
 $menuObj = new Navigation();
 $cart = new Cart();
+$db = new Database();
 
 $menu = $menuObj->getMenu("header");
-$itemCount = $cart->getItemCount();
+
 ?>
 
 <header>

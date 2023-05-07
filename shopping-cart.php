@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 use main\database\Database;
 use main\shop\Cart;
@@ -8,12 +8,12 @@ require_once 'shop/Cart.php';
 require_once 'database/Database.php';
 
 
-/*if (!isset($_SESSION["user"])) {
-    header("Location: login.php")
+if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
     exit;
 }
 
-*/
+
 
 
 
@@ -28,8 +28,9 @@ $db = new Database();
 if (isset($_GET["action"])) {
     if ($_GET["action"] == "delete") {
         $item_id = $_GET["id"];
+
         echo "<div id='alert' class='alert alert-danger'>Item remove.</div>";
-        $cart->removeItem($item_id);
+        $db->removeCart($item_id);
 
 
     }
@@ -48,8 +49,8 @@ if (isset($_GET["action"])) {
 }
 
 if (isset($_POST["action"]) && $_POST["action"] == "clear_cart") {
-    if (!empty($_SESSION["shopping_cart"])) {
-        $cart->clearCart();
+    if (!empty($db->getCartItems())) {
+        $db->clearCart();
         echo "<div id='alert' class='alert alert-danger'>All product remove.</div>";
     }
 }
@@ -61,20 +62,21 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
     $name = $userInfo["full_name"];
     $address = $userInfo["address"];
 
-    $totalProduct = $cart->getTotalQuantity();
-    $totalPrice = $cart->getTotalPrice();
+    $totalProduct = $db->getTotalQuantity();
+    $totalPrice = $db->getTotalPrice();
+
 
     if ($totalProduct == 0 || $totalPrice == 0) {
         echo "<div id='alert' class='alert alert-danger'>Cannot submit order with total price or total product equal to 0.</div>";
     } else {
         $orderId = $db->addOrder($name, $email,$address, $totalProduct, $totalPrice, $userId);
-        foreach ($_SESSION["shopping_cart"] as $item) {
-            $productId = $item["item_id"];
-            $quantity = $item["item_quantity"];
-            $amount = $item["item_price"];
+        foreach ($db->getCartItems() as $item) {
+            $productId = $item["ProductID"];
+            $quantity = $item["quantity"];
+            $amount = $item["price"];
             $db->addProductOrder($productId,$orderId, $quantity, $amount * $quantity);
         }
-        $cart->clearCart();
+        $db->clearCart();
         echo "<div id='alert' class='alert alert-success'>Order submitted.</div>";
     }
 }
@@ -131,7 +133,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
           <br>
           <div class="container-fluid" style="height: 400px;">
               <form method="post" class="d-flex justify-content-end">
-                  <?php if (!empty($_SESSION["shopping_cart"])): ?>
+                  <?php if (!empty($db->getCartItems())): ?>
                       <input type="hidden" name="action" value="clear_cart">
                       <input type="submit" value="Clear Cart" class="btn btn-danger">
 
@@ -139,17 +141,16 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
               </form>
               <table class="table table-bordered">
                   <tr>
-                      <th width="15%">Item image</th>
-                      <th width="30%">Item Name</th>
-                      <th width="10%">Quantity</th>
-                      <th width="10%">Price</th>
-                      <th width="25%">Total</th>
-                      <th width="15%">Action</th>
+                      <th width="25%">Item image</th>
+                      <th width="20%">Item Name</th>
+                      <th width="20%">Quantity</th>
+                      <th width="20%">Price</th>
+                      <th width="20%">Action</th>
                   </tr>
                   <?php
+                  $total = 0;
 
-                  if(!empty($_SESSION["shopping_cart"])) {
-                      var_dump($db->getCartItems());
+                  if (!empty($db->getCartItems())){
 
                       foreach($db->getCartItems() as $keys => $values) {
                           ?>
@@ -158,15 +159,15 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
                               <td><?php echo $values["name"]; ?></td>
                               <td><?php echo $values["quantity"]; ?></td>
                               <td>$ <?php echo $values["price"]; ?></td>
-                              <td>$ <?php echo $values["quantity"] * $values["price"] ;?></td>
                               <td><a href="shopping-cart.php?action=delete&id=<?php echo $values["ProductID"]; ?>"><span class="text-danger">Remove</span></a></td>
                           </tr>
                           <?php
-                          $total = $total + ($values["quantity"] * $values["price"]);
+
+                          $total += ($values["quantity"] * $values["price"]);
                       }
                       ?>
                       <tr>
-                          <td colspan="5" align="right">Total</td>
+                          <td colspan="4" align="right">Total</td>
                           <td align="right">$ <?php echo $total ?></td>
                           <td></td>
                       </tr>
@@ -187,7 +188,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
 
 
               <form method="post">
-                  <?php if (!empty($_SESSION["shopping_cart"])): ?>
+                  <?php if (!empty($db->getCartItems())): ?>
                       <input type="hidden" name="action" value="submit_order">
                       <input type="submit" name="submit_order" value="Send Order" class="btn btn-block" style="background-color: green;">
                   <?php endif; ?>
@@ -197,6 +198,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submit_order") {
               <?php $orderID = $db->getMaxOrderID()?>
               <?php $array = $db->getTableOrders($userID ); ?>
               <?php $array2 = $db->getTableOrderss(); ?>
+
               <table class="table table-bordered table-hover">
                   <thead class="thead-dark">
                   <tr>
