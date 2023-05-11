@@ -18,7 +18,7 @@ $cart = new Cart();
 $db = new Database();
 
 $menu = $menuObj->getMenu("header");
-
+$itemCount = $db->getItemCount();
 ?>
 
 <header>

@@ -163,6 +163,17 @@ class Database
 
     }
 
+
+    function getItemCount() {
+        $query = "SELECT sum(quantity) as count FROM cart";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // overenie, či vrátená hodnota nie je NULL
+        $count = isset($row['count']) ? $row['count'] : 0;
+        return $count;
+    }
+
     public function getAllProducts()
     {
         $query = "SELECT * FROM product";
