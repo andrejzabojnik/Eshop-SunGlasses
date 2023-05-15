@@ -1,12 +1,9 @@
 <?php
 use main\database\Database;
-use main\shop\Cart;
 
-require_once 'shop\Cart.php';
 require_once 'database\Database.php';
 
 
-$cart = new Cart();
 $db = new Database();
 if (isset($_POST["add_to_cart"])) {
     // Check if user is logged in
@@ -54,5 +51,14 @@ if (isset($_POST["add_to_cart"])) {
         }
     }
     ?>
+
+
+    <script>
+        var alert = document.getElementById("alert");
+
+        setTimeout(function() {
+            alert.style.display = "none";
+        }, 5000);
+    </script>
 </div>
 </div>

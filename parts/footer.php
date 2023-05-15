@@ -1,9 +1,7 @@
 <?php
-include_once "shop/Navigation.php";
 
-use main\shop\Navigation;
 
-$menuObj = new Navigation();
+$menuObj = new \main\database\Database();
 
 $menu = $menuObj->getMenu("header");
 ?>

@@ -54,24 +54,32 @@ if (isset($_SESSION["user"])) {
                 $passwordRepeat = $_POST["repeat_password"];
                 $address = $_POST["address"];
 
-                // validate user input
-                $db->validateUser($fullName, $email, $address, $password, $passwordRepeat);
-                // check if email already exists
-                $db->checkEmailExists($email);
-                $errors = $db->getErrors();
-                if (count($errors) > 0) {
-                    foreach ($errors as $error) {
-                        echo "<div class='alert alert-danger'>$error</div>";
-                    }
-                } else {
-                    // create user
-                    $db->createUser($fullName, $email, $address, $password);
 
-                    // display success message
-
-                    // redirect to login page after 5 seconds
-                    echo "<script>setTimeout(function() { window.location.href = 'login.php?success=true'; }, 1500);</script>";
+                if (empty($fullName) || empty($email) || empty($password) || empty($address) || empty($passwordRepeat)) {
+                    echo "<div id='alert' class='alert alert-danger'>Please fill in all the required fields!</div>";
+                }  else if($db->checkEmailExists($email)) {
+                    echo "<div id='alert' class='alert alert-danger'>Email already exists!</div>";
+               } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    echo "<div id='alert' class='alert alert-danger'>Email is not valid</div>";
+                }else if (strlen($password) < 8) {
+                    echo "<div id='alert' class='alert alert-danger'>Password must be at least 8 characters long</div>";
+                } else if ($password !== $passwordRepeat) {
+                    echo "<div id='alert' class='alert alert-danger'>Password does not match</div>";
                 }
+                else {
+                    if ($db->createUser($fullName, $email, $address, $password)) {
+                        echo "<div id='alert' class='alert alert-success'>You are registered successfully. Please now log in.</div>";
+                        echo "<script>setTimeout(function() { window.location.href = 'login.php?success=true'; }, 1500);</script>";
+                    } else {
+                        echo "<div id='alert' class='alert alert-danger'>Error: An unexpected error occurred. Please try again later.</div>";
+                    }
+
+                }
+
+
+
+
+
             }
             ?>
             <div class="row justify-content-center">

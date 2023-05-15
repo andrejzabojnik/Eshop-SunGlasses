@@ -1,9 +1,12 @@
 <?php
-include_once "shop/Navigation.php";
+use main\database\Database;
 
-use main\shop\Navigation;
+require_once "database/Database.php";
 
-$menuObj = new Navigation();
+
+
+
+$menuObj = new Database();
 
 $path = basename($_SERVER['PHP_SELF']);
 $name = $menuObj->getMenuItemName($path);

@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 use main\database\Database;
 
 require_once "database\Database.php";
@@ -16,16 +15,17 @@ if (isset($_POST["login"])) {
     $email = $_POST["email"];
     $_SESSION['email'] = $email;
     $password = $_POST["password"];
-    $result = $db->loginUser($email, $password);
+    $errorMessage = "";
 
+    $result = $db->loginUser($email, $password, $errorMessage);
 
     if ($result) {
         header("Location: index.php");
         exit();
+    } else {
+        echo "<div class='alert alert-danger'>$errorMessage</div>";
     }
 }
-
-
 ?>
 
 <!doctype html>

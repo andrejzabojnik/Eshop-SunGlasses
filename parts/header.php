@@ -1,23 +1,20 @@
 <?php
 
 
-include_once "shop/Navigation.php";
+
 require_once "database/Database.php";
-require_once "shop/Cart.php";
 
 use main\database\Database;
-use main\shop\Cart;
-use main\shop\Navigation;
 
 
 
 
 
-$menuObj = new Navigation();
-$cart = new Cart();
+
+
 $db = new Database();
 
-$menu = $menuObj->getMenu("header");
+$menu = $db->getMenu("header");
 $itemCount = $db->getItemCount();
 ?>
 
@@ -36,7 +33,9 @@ $itemCount = $db->getItemCount();
                         <nav>
                             <ul id="navigation">
                                 <?php
-                                $menuObj->printMenu($menu);
+                                foreach ($menu as $key => $menuItem) {
+                                    echo '<li><a href="'.$menuItem['path'].'">'.$menuItem['name'].'</a></li>';
+                                }
                                 ?>
                             </ul>
                         </nav>

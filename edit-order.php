@@ -11,10 +11,8 @@ if(isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
     $orderID = $_GET['id'];
 
-    // Tu môžete spracovať parameter action a id podľa potreby
 
 } else {
-    // Ak nie sú definované, môžete ich spracovať podľa predvolenej logiky alebo presmerovať používateľa na inú stránku
     header('Location: shopping-cart.php');
     exit;
 }

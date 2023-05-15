@@ -1,4 +1,6 @@
-
+<?php
+session_start()
+?>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
@@ -44,8 +46,7 @@
 
 
 
-        <!-- Hero Area End-->
-        <!-- Latest Products Start -->
+
 
 
 
@@ -108,15 +109,7 @@
     <script src="./assets/js/jquery.validate.min.js"></script>
     <script src="./assets/js/mail-script.js"></script>
 
-    <script>
-        // Získajte odkaz na element správy
-        var alert = document.getElementById("alert");
 
-        // Skryte správu po 5 sekundách
-        setTimeout(function() {
-            alert.style.display = "none";
-        }, 2000);
-    </script>
     <script src="./assets/js/jquery.ajaxchimp.min.js"></script>
 
     <!-- Jquery Plugins, main Jquery -->
